@@ -16,6 +16,9 @@ var publicRouter = require('./app/routes/public');
 // Seguridad
 var helmet = require('helmet');
 
+// Uso los parametros por defecto del helmet
+app.use(helmet());
+
 // Activo el morgan dependiendo del ambiente en el que se ejecute este
 var logger = morgan(config.dev ? 'dev' : 'prod');
 
@@ -25,15 +28,13 @@ app.use(bodyParser.urlencoded({
 }));
 
 http.createServer(function (req, res) {
+    var url = req.url;
+
+    if(url.includes('public')) {
+        this.publicRouter.process(req, res);
+    }
+
     logger(req, res, function (err) {
-        if(err){
-            res.writeHead(500, {'Content-type':'text/plain'});
-            res.write(err);
-            res.end();
-        } else {
-            res.writeHead(200, {'Content-type':'text/plain'});
-            res.write('Online');
-            res.end( );
-        }
+        if (err) return done(err)
     })
 });
