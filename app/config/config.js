@@ -1,19 +1,34 @@
 var  config = {};
 
-// bandera del modo de desarrollo
-config.dev = true;
-
 // configuracion del servidor de nodejs
 config.server = {};
 
-// configuracion para produccion
-config.server.prod = {};
-
 // configuracion para desarrollo
 config.server.dev = {
-    url: 'http://localhost',
-    port: 6000,
-    fullUrl: config.server.dev.url + ':' + config.server.dev.port 
+    url: '127.0.0.1',
+    port: 8080
+};
+config.server.dev.fullUrl = config.server.dev.url + ':' + config.server.dev.port;
+
+// configuracion para certificacion
+config.server.qa = {
+    url: '127.0.0.1',
+    port: 6000
+};
+config.server.qa.fullUrl = config.server.qa.url + ':' + config.server.qa.port;
+
+// configuracion para produccion
+config.server.pdn = {
+    url: '127.0.0.1',
+    port: 6000
+};
+config.server.pdn.fullUrl = config.server.pdn.url + ':' + config.server.pdn.port;
+
+// configuracion de la bd
+config.db = {
+    dev: {},
+    qa: {},
+    pdn: {}
 };
 
 /**

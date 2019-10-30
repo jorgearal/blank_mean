@@ -1,14 +1,17 @@
-function getPublic(request, response) {
+const url = require('url');
 
+exports.getPublic = (req, res) => {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end();
 }
 
-function process(request, response) {
-    if(request.url === '/public/' && request.METHOD === 'GET') {
-        this.getPublic(request, response);
+exports.process = (req, res) => {
+    const reqUrl = url.parse(req.url, true);
+
+    if(reqUrl.path === '/public' && req.method === 'GET') {
+        this.getPublic(req, res);
     } else {
         res.writeHead(404, {'Content-Type': 'text/html'});
         res.end();
     }
 }
-
-modules.exports = this;

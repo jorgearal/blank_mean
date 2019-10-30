@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jorgearal/blank_mean/issues"
   },
-  "homepage": "https://github.com/jorgearal/blank_mean#readme"
+  "homepage": "https://github.com/jorgearal/blank_mean#readme",
+  "dependencies": {
+    "morgan": "^1.9.1"
+  }
 }
