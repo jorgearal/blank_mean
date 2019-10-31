@@ -1,6 +1,6 @@
 // @author Jorge Hernan Arcila Alzate
-//  -> Path - Manejo de directorios
-//  -> BodyParser - Manejo de los headers y demás atributos de las peticiones HTTP
+//  -> Http - Manejo nativo de peticiones HTTP
+//  -> Url - Middleware para manejar la URL de los request
 //  -> Morgan - Logger
 const http = require('http'),
     url = require('url'),
