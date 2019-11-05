@@ -1,6 +1,7 @@
 module.exports = class CustomError {
-    constructor(status, message) {
+    constructor(status, message, err) {
         this.status = status;
+        this.err = err;
         if(!message) {
             if(this.status === 404) {
                 this.default404();
@@ -17,14 +18,11 @@ module.exports = class CustomError {
     }
 
     default404() {
-        this.message = {
-            message: 'Not found'
-        };
+        this.message = 'Not found';
+        this.err = '';
     }
 
     default500() {
-        this.message = {
-            message: 'Internal server error'
-        };
+        this.message = 'Internal server error';
     }
 }

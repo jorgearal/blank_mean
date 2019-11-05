@@ -1,21 +1,11 @@
-var CustomError = require('../entities/customError');
+var express = require('express');
+var router = express.Router();
 
-const url = require('url');
-
-exports.getPublic = (req, res) => {
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.write(JSON.stringify({
+/* El Index mostrara el estado de la aplicacion */
+router.get('/', function (req, res) {
+    res.send({
         message: 'OK'
-    }));
-    res.end();
-}
+    });
+});
 
-exports.process = (req, res, callback) => {
-    const reqUrl = url.parse(req.url, true);
-
-    if(reqUrl.path === '/public' && req.method === 'GET') {
-        this.getPublic(req, res);
-    } else {
-        callback(new CustomError(404), res);
-    }
-}
+module.exports = router;

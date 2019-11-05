@@ -2,12 +2,15 @@
 //  -> Express - Manejo de peticiones HTTP
 //  -> Morgan - Logger
 //  -> Helmet - Seguridad
-const express = express()
+const express = require('express'),
     morgan = require('morgan'),
     helmet = require('helmet');
 
 // Creo la instancia del objeto express
 const app = express();
+
+// Constantes
+const ENV = 'dev';
 
 // El objeto HTTP Server que retorna Express
 var server;
@@ -25,9 +28,6 @@ express.urlencoded({
     extended: true
 });
 
-// Constantes
-const ENV = 'dev';
-
 // Configuracion
 const config = require('./app/config/config'),
     CORSConfig = require('./app/config/CORS.config');
@@ -41,34 +41,28 @@ const publicRouter = require('./app/controllers/public.controller');
 // CORS Middleware
 app.use(CORSConfig.CORSMiddleware);
 
-///////////////////////////////////////////////////////////////////
+// Uso el controller publico para determinadas operaciones
+app.use('/public/', publicRouter);
 
-var manageErrors = (err, res) => {
-    res.writeHead(err.status, {'Content-Type': 'application/json'});
+// Captura el error 404 y lo redirige
+app.use((req, res, next) => {
+    next(new CustomError(404));
+});
 
-    if(err.message) {
-        res.write(JSON.stringify(err.message));
-    }
-    
-    res.end();
-};
-
-const server = http.createServer((req, res) => {
-    const reqUrl = url.parse(req.url, true);
-
-    if(reqUrl.path.includes('public')) {
-        publicRouter.process(req, res, manageErrors);
+// Captura otro tipo de errores, los muestra dependiendo del entorno y los redirige
+app.use((err, req, res, next) => {
+    if(err.status === 404) {
+        res.status(404).send(err);
     } else {
-        manageErrors(new CustomError(404), res);
+        console.error(err.stack);
+        res.status(500).send(new CustomError(500, err.message, ENV != 'pdn' ? err.stack : {}));
     }
-
-    logger(req, res, function (err) {
-        if (err) return done(err)
-    })
 });
 
 const envConf = config.server[ENV];
 
-server.listen(envConf.port, envConf.url, () => {
+server = app.listen(envConf.port, envConf.url, () => {
     console.log(`Server running at http://${envConf.url}:${envConf.port}/`);
 });
+
+module.exports = app;
